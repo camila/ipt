@@ -1,16 +1,17 @@
 #!/bin/bash
-TC_DIR=${TOMCAT_HOME:=/opt/tomcat}
+TMP_ODE_DIR=/tmp/_ode
+WSDL_URL=http://localhost:8181/bestdog/
 
-if [ "$1" == "deploy" ]; then
+if [ "$1" == "wsdl" ]; then
 
-  rm -r $TOMCAT_HOME/webapps/ode/WEB-INF/processes/bpelContent
-  sleep 5
-  cp -r bpelContent/ $TOMCAT_HOME/webapps/ode/WEB-INF/processes/
+  cd bpelContent
+  wget $WSDL_URL/Estoque?wsdl -O Estoque.wsdl
+  wget $WSDL_URL/Milhagem?wsdl -O Milhagem.wsdl
+
 
 else
 
-  cd bpelContent
-  wget http://localhost:8181/bestdog/Estoque?wsdl -O Estoque.wsdl
-  wget http://localhost:8181/bestdog/Milhagem?wsdl -O Milhagem.wsdl
+  cp -r bpelContent/ $TMP_ODE_DIR/WEB-INF/processes/
+
 
 fi

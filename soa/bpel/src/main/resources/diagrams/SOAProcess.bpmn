@@ -1,0 +1,548 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
+  <collaboration id="Collaboration">
+    <participant id="poolFranquia" name="Franquia" processRef="process_pool1"></participant>
+    <participant id="poolCentral" name="Central" processRef="process_pool2"></participant>
+    <participant id="poolFornecedor" name="Fornecedor" processRef="process_pool3"></participant>
+  </collaboration>
+  <process id="process_pool1" name="process_pool1" isExecutable="true">
+    <laneSet id="laneSet_process_pool1">
+      <lane id="laneCliente" name="Cliente">
+        <flowNodeRef>startevent1</flowNodeRef>
+        <flowNodeRef>endevent1</flowNodeRef>
+        <flowNodeRef>usertaskEnviaPedido</flowNodeRef>
+        <flowNodeRef>usertaskRecebeProduto</flowNodeRef>
+        <flowNodeRef>usertaskRecebeProduto</flowNodeRef>
+        <flowNodeRef>errorendevent1</flowNodeRef>
+      </lane>
+      <lane id="laneFilial" name="Filial">
+        <flowNodeRef>servicetaskCalculaDesconto</flowNodeRef>
+        <flowNodeRef>servicetaskFechaPedido</flowNodeRef>
+        <flowNodeRef>servicetaskRemoveEstoque</flowNodeRef>
+        <flowNodeRef>servicetaskRemoveEstoque</flowNodeRef>
+        <flowNodeRef>exclusivegateway1</flowNodeRef>
+        <flowNodeRef>servicetaskRecebePagamento</flowNodeRef>
+        <flowNodeRef>messagestarteventRecebePedido</flowNodeRef>
+        <flowNodeRef>servicetaskCalculaMilhagem</flowNodeRef>
+        <flowNodeRef>parallelgateway1</flowNodeRef>
+        <flowNodeRef>scripttaskEstoque</flowNodeRef>
+        <flowNodeRef>receivetaskDesconto</flowNodeRef>
+        <flowNodeRef>scripttask1</flowNodeRef>
+        <flowNodeRef>usertask1</flowNodeRef>
+        <flowNodeRef>usertaskDesconto</flowNodeRef>
+        <flowNodeRef>inclusivegateway1</flowNodeRef>
+        <flowNodeRef>scripttask2</flowNodeRef>
+        <flowNodeRef>endevent2</flowNodeRef>
+        <flowNodeRef>servicetaskCalculaLogistica</flowNodeRef>
+        <flowNodeRef>mailtask1</flowNodeRef>
+        <flowNodeRef>receivetaskReposicaoFilial</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="startevent1" name="Start"></startEvent>
+    <userTask id="usertaskEnviaPedido" name="Envia Pedido"></userTask>
+    <endEvent id="endevent1" name="End"></endEvent>
+    <sequenceFlow id="flowFazPedido" name="Escolhe Items" sourceRef="startevent1" targetRef="usertaskEnviaPedido"></sequenceFlow>
+    <startEvent id="messagestarteventRecebePedido" name="Recebe Pedido">
+      <messageEventDefinition></messageEventDefinition>
+    </startEvent>
+    <serviceTask id="servicetaskCalculaMilhagem" name="Calcula Milhagem"></serviceTask>
+    <exclusiveGateway id="exclusivegateway1" name="Exclusive Gateway"></exclusiveGateway>
+    <sequenceFlow id="flowUsouMilhas" name="Tem Estoque e Desconto" sourceRef="exclusivegateway1" targetRef="scripttask2"></sequenceFlow>
+    <sequenceFlow id="flow9" sourceRef="mailtask1" targetRef="scripttask1"></sequenceFlow>
+    <sequenceFlow id="flowEnviaPedidoCPF" name="Opção, CPF, Pagamento" sourceRef="usertaskEnviaPedido" targetRef="messagestarteventRecebePedido"></sequenceFlow>
+    <sequenceFlow id="flowRecebePedido" name="Receber Pedido" sourceRef="messagestarteventRecebePedido" targetRef="inclusivegateway1"></sequenceFlow>
+    <sequenceFlow id="flowTemEstoqueSemDesconto" name="Tem Estoque" sourceRef="exclusivegateway1" targetRef="mailtask1"></sequenceFlow>
+    <scriptTask id="scripttaskEstoque" name="Calcula Estoque" activiti:autoStoreVariables="true"></scriptTask>
+    <sequenceFlow id="flow14" sourceRef="inclusivegateway1" targetRef="servicetaskCalculaMilhagem"></sequenceFlow>
+    <sequenceFlow id="flow15" sourceRef="inclusivegateway1" targetRef="scripttaskEstoque"></sequenceFlow>
+    <sequenceFlow id="flow16" sourceRef="scripttaskEstoque" targetRef="exclusivegateway1"></sequenceFlow>
+    <scriptTask id="scripttask1" name="Entrega Pedido" activiti:autoStoreVariables="true"></scriptTask>
+    <inclusiveGateway id="inclusivegateway1" name="Parallel Gateway"></inclusiveGateway>
+    <sequenceFlow id="flowMilhagem" name="Add/Remove Milhagem" sourceRef="servicetaskCalculaMilhagem" targetRef="exclusivegateway1"></sequenceFlow>
+    <scriptTask id="scripttask2" name="Calcula Desconto" activiti:autoStoreVariables="true"></scriptTask>
+    <endEvent id="endevent2" name="End"></endEvent>
+    <serviceTask id="servicetaskCalculaLogistica" name="Calcula Logistica Distribuicao"></serviceTask>
+    <serviceTask id="mailtask1" name="Remove Estoque" activiti:type="mail"></serviceTask>
+    <sequenceFlow id="flow31" sourceRef="scripttask2" targetRef="mailtask1"></sequenceFlow>
+    <userTask id="usertaskRecebeProduto" name="Recebe Produto"></userTask>
+    <sequenceFlow id="flowProdutoNF" name="Item e NF" sourceRef="scripttask1" targetRef="usertaskRecebeProduto"></sequenceFlow>
+    <sequenceFlow id="flow33" sourceRef="usertaskRecebeProduto" targetRef="endevent1"></sequenceFlow>
+    <endEvent id="errorendevent1" name="ErrorEnd">
+      <errorEventDefinition></errorEventDefinition>
+    </endEvent>
+    <sequenceFlow id="flowErroSemEstoque" name="Sem Estoque" sourceRef="exclusivegateway1" targetRef="errorendevent1"></sequenceFlow>
+  </process>
+  <process id="process_pool2" name="process_pool2" isExecutable="true">
+    <laneSet id="laneSet_process_pool2">
+      <lane id="laneFranqueadora">
+        <flowNodeRef>servicetaskAnalisaEstoqueFilial</flowNodeRef>
+        <flowNodeRef>timerstartevent1</flowNodeRef>
+        <flowNodeRef>parallelgateway2</flowNodeRef>
+        <flowNodeRef>timerintermediatecatchevent1</flowNodeRef>
+        <flowNodeRef>parallelgateway3</flowNodeRef>
+        <flowNodeRef>exclusivegateway2</flowNodeRef>
+        <flowNodeRef>eventgateway1</flowNodeRef>
+        <flowNodeRef>servicetaskRemoveItemCentral</flowNodeRef>
+        <flowNodeRef>exclusivegateway2</flowNodeRef>
+        <flowNodeRef>scripttaskReporFilial</flowNodeRef>
+        <flowNodeRef>mailtaskRemoveEstoqueCentral</flowNodeRef>
+        <flowNodeRef>endevent3</flowNodeRef>
+        <flowNodeRef>servicetaskIncluiItemFilial</flowNodeRef>
+        <flowNodeRef>scripttaskLogistica</flowNodeRef>
+        <flowNodeRef>receivetaskRepoCentral</flowNodeRef>
+        <flowNodeRef>servicetaskEnviaPedidoCotacao</flowNodeRef>
+        <flowNodeRef>eventgateway1</flowNodeRef>
+        <flowNodeRef>messagestartevent1</flowNodeRef>
+        <flowNodeRef>timerintermediatecatchevent2</flowNodeRef>
+        <flowNodeRef>servicetaskEnviaPedidoCompra</flowNodeRef>
+        <flowNodeRef>manualtaskPedidoCompra</flowNodeRef>
+        <flowNodeRef>receivetask1</flowNodeRef>
+        <flowNodeRef>scripttaskCompra</flowNodeRef>
+        <flowNodeRef>receivetaskConfirmaCompra</flowNodeRef>
+        <flowNodeRef>receivetaskReposicaoFilial</flowNodeRef>
+        <flowNodeRef>parallelgateway3</flowNodeRef>
+        <flowNodeRef>scripttaskGeraRelatorio</flowNodeRef>
+        <flowNodeRef>scripttaskMetas</flowNodeRef>
+        <flowNodeRef>servicetaskAvaliaEstoques</flowNodeRef>
+        <flowNodeRef>servicetaskAtuCentral</flowNodeRef>
+        <flowNodeRef>exclusivegateway3</flowNodeRef>
+      </lane>
+    </laneSet>
+    <serviceTask id="servicetaskAvaliaEstoques" name="Avalia Estoques"></serviceTask>
+    <startEvent id="timerstartevent1" name="Timer start">
+      <timerEventDefinition></timerEventDefinition>
+    </startEvent>
+    <sequenceFlow id="flowFimDoDia" name="Fim Dia" sourceRef="timerstartevent1" targetRef="parallelgateway3"></sequenceFlow>
+    <parallelGateway id="parallelgateway2" name="Parallel Gateway"></parallelGateway>
+    <sequenceFlow id="flow17" sourceRef="servicetaskAvaliaEstoques" targetRef="parallelgateway2"></sequenceFlow>
+    <sequenceFlow id="flow18" sourceRef="parallelgateway2" targetRef="receivetaskReposicaoFilial"></sequenceFlow>
+    <intermediateCatchEvent id="timerintermediatecatchevent1" name="TimerCatchEvent">
+      <timerEventDefinition></timerEventDefinition>
+    </intermediateCatchEvent>
+    <sequenceFlow id="flow24" sourceRef="mailtaskRemoveEstoqueCentral" targetRef="servicetaskIncluiItemFilial"></sequenceFlow>
+    <receiveTask id="receivetaskReposicaoFilial" name="Analisa Reposicao Filial"></receiveTask>
+    <serviceTask id="mailtaskRemoveEstoqueCentral" name="Remove Estoque Central" activiti:type="mail"></serviceTask>
+    <receiveTask id="receivetaskRepoCentral" name="Analisa Reposicao Central"></receiveTask>
+    <exclusiveGateway id="exclusivegateway2" name="Exclusive Gateway"></exclusiveGateway>
+    <sequenceFlow id="flowTemReposicaoFilial" name="Tem Reposicao Filial" sourceRef="exclusivegateway2" targetRef="mailtaskRemoveEstoqueCentral"></sequenceFlow>
+    <sequenceFlow id="flow29" sourceRef="exclusivegateway2" targetRef="endevent3"></sequenceFlow>
+    <scriptTask id="scripttaskReporFilial" name="Avalia Reposicao Filial" activiti:autoStoreVariables="true"></scriptTask>
+    <sequenceFlow id="flow30" sourceRef="scripttaskReporFilial" targetRef="exclusivegateway2"></sequenceFlow>
+    <sequenceFlow id="flowInicioDia" name="Inicio Dia" sourceRef="timerintermediatecatchevent1" targetRef="scripttaskReporFilial"></sequenceFlow>
+    <endEvent id="endevent3" name="End"></endEvent>
+    <sequenceFlow id="flow35" sourceRef="receivetaskRepoCentral" targetRef="scripttaskCompra"></sequenceFlow>
+    <serviceTask id="servicetaskIncluiItemFilial" name="Inclui Item Estoque Filial"></serviceTask>
+    <sequenceFlow id="flow40" sourceRef="servicetaskIncluiItemFilial" targetRef="endevent3"></sequenceFlow>
+    <scriptTask id="scripttaskLogistica" name="Planejamento Logistico" activiti:autoStoreVariables="true"></scriptTask>
+    <sequenceFlow id="flow42" sourceRef="receivetaskReposicaoFilial" targetRef="scripttaskLogistica"></sequenceFlow>
+    <sequenceFlow id="flow43" sourceRef="scripttaskLogistica" targetRef="endevent3"></sequenceFlow>
+    <scriptTask id="scripttaskCompra" name="Avalia Compra" activiti:autoStoreVariables="true"></scriptTask>
+    <eventBasedGateway id="eventgateway1" name="Event Gateway"></eventBasedGateway>
+    <sequenceFlow id="flow44" sourceRef="scripttaskCompra" targetRef="eventgateway1"></sequenceFlow>
+    <startEvent id="messagestartevent1" name="Message start">
+      <messageEventDefinition></messageEventDefinition>
+    </startEvent>
+    <intermediateCatchEvent id="timerintermediatecatchevent2" name="TimerCatchEvent">
+      <timerEventDefinition></timerEventDefinition>
+    </intermediateCatchEvent>
+    <sequenceFlow id="flow45" sourceRef="eventgateway1" targetRef="messagestartevent1"></sequenceFlow>
+    <sequenceFlow id="flow46" sourceRef="eventgateway1" targetRef="timerintermediatecatchevent2"></sequenceFlow>
+    <task id="manualtaskPedidoCompra" name="Envia Pedido Compra Manual"></task>
+    <serviceTask id="servicetaskAtuCentral" name="Atualiza Central"></serviceTask>
+    <sequenceFlow id="flow41" sourceRef="servicetaskAtuCentral" targetRef="endevent3"></sequenceFlow>
+    <sequenceFlow id="flow47" sourceRef="timerintermediatecatchevent2" targetRef="manualtaskPedidoCompra"></sequenceFlow>
+    <sequenceFlow id="flow48" sourceRef="messagestartevent1" targetRef="receivetaskConfirmaCompra"></sequenceFlow>
+    <sequenceFlow id="flow49" sourceRef="receivetaskConfirmaCompra" targetRef="servicetaskAtuCentral"></sequenceFlow>
+    <sequenceFlow id="flow50" sourceRef="manualtaskPedidoCompra" targetRef="servicetaskAtuCentral"></sequenceFlow>
+    <receiveTask id="receivetaskConfirmaCompra" name="Envia Pedido Compra"></receiveTask>
+    <receiveTask id="receivetaskReposicaoFilial" name="Analisa Reposicao Filial"></receiveTask>
+    <sequenceFlow id="flow42" sourceRef="receivetaskReposicaoFilial" targetRef="scripttaskLogistica"></sequenceFlow>
+    <parallelGateway id="parallelgateway3" name="Parallel Gateway"></parallelGateway>
+    <sequenceFlow id="flow53" sourceRef="parallelgateway3" targetRef="servicetaskAvaliaEstoques"></sequenceFlow>
+    <scriptTask id="scripttaskGeraRelatorio" name="Gera Relatorio" activiti:autoStoreVariables="true"></scriptTask>
+    <sequenceFlow id="flow54" sourceRef="parallelgateway3" targetRef="scripttaskMetas"></sequenceFlow>
+    <scriptTask id="scripttaskMetas" name="Calcula Metas" activiti:autoStoreVariables="true"></scriptTask>
+    <sequenceFlow id="flow55" sourceRef="scripttaskMetas" targetRef="scripttaskGeraRelatorio"></sequenceFlow>
+    <sequenceFlow id="flow58" sourceRef="parallelgateway2" targetRef="receivetaskRepoCentral"></sequenceFlow>
+    <sequenceFlow id="flow59" sourceRef="scripttaskGeraRelatorio" targetRef="endevent3"></sequenceFlow>
+  </process>
+  <process id="process_pool3" name="process_pool3" isExecutable="true">
+    <laneSet id="laneSet_process_pool3">
+      <lane id="lane4">
+        <flowNodeRef>messagestartevent2</flowNodeRef>
+        <flowNodeRef>servicetaskAceitaPedido</flowNodeRef>
+        <flowNodeRef>businessruletask1</flowNodeRef>
+        <flowNodeRef>receivetask1</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="messagestartevent2" name="Message start">
+      <messageEventDefinition></messageEventDefinition>
+    </startEvent>
+    <sequenceFlow id="flow51" sourceRef="messagestartevent2" targetRef="receivetask1"></sequenceFlow>
+    <receiveTask id="receivetask1" name="Aceita pedido"></receiveTask>
+    <sequenceFlow id="flow57" sourceRef="receivetask1" targetRef="messagestartevent1"></sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_Collaboration">
+    <bpmndi:BPMNPlane bpmnElement="Collaboration" id="BPMNPlane_Collaboration">
+      <bpmndi:BPMNShape bpmnElement="lane4" id="BPMNShape_lane4">
+        <omgdc:Bounds height="81.0" width="1261.0" x="20.0" y="680.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="poolFranquia" id="BPMNShape_poolFranquia">
+        <omgdc:Bounds height="362.0" width="1281.0" x="0.0" y="0.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="laneCliente" id="BPMNShape_laneCliente">
+        <omgdc:Bounds height="175.0" width="1261.0" x="20.0" y="0.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="laneFilial" id="BPMNShape_laneFilial">
+        <omgdc:Bounds height="186.0" width="1261.0" x="20.0" y="175.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="poolCentral" id="BPMNShape_poolCentral">
+        <omgdc:Bounds height="312.0" width="1281.0" x="0.0" y="360.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="poolFornecedor" id="BPMNShape_poolFornecedor">
+        <omgdc:Bounds height="81.0" width="1281.0" x="0.0" y="680.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="startevent1" id="BPMNShape_startevent1">
+        <omgdc:Bounds height="35.0" width="35.0" x="60.0" y="50.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="endevent1" id="BPMNShape_endevent1">
+        <omgdc:Bounds height="35.0" width="35.0" x="1230.0" y="110.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="usertaskEnviaPedido" id="BPMNShape_usertaskEnviaPedido">
+        <omgdc:Bounds height="55.0" width="105.0" x="210.0" y="40.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="servicetaskIncluiItemCentral" id="BPMNShape_servicetaskIncluiItemCentral">
+        <omgdc:Bounds height="55.0" width="105.0" x="1120.0" y="523.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="servicetaskCalculaLogistica" id="BPMNShape_servicetaskCalculaLogistica">
+        <omgdc:Bounds height="55.0" width="105.0" x="1240.0" y="370.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="servicetaskIncluiItemFilial" id="BPMNShape_servicetaskIncluiItemFilial">
+        <omgdc:Bounds height="55.0" width="105.0" x="680.0" y="370.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="timerstartevent1" id="BPMNShape_timerstartevent1">
+        <omgdc:Bounds height="35.0" width="35.0" x="60.0" y="460.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="servicetaskCalculaMilhagem" id="BPMNShape_servicetaskCalculaMilhagem">
+        <omgdc:Bounds height="55.0" width="105.0" x="220.0" y="205.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="exclusivegateway1" id="BPMNShape_exclusivegateway1">
+        <omgdc:Bounds height="40.0" width="40.0" x="490.0" y="212.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="messagestarteventRecebePedido" id="BPMNShape_messagestarteventRecebePedido">
+        <omgdc:Bounds height="35.0" width="35.0" x="60.0" y="215.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="receivetask1" id="BPMNShape_receivetask1">
+        <omgdc:Bounds height="55.0" width="105.0" x="830.0" y="690.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="scripttaskEstoque" id="BPMNShape_scripttaskEstoque">
+        <omgdc:Bounds height="55.0" width="105.0" x="220.0" y="280.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="scripttask1" id="BPMNShape_scripttask1">
+        <omgdc:Bounds height="55.0" width="105.0" x="1110.0" y="205.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="inclusivegateway1" id="BPMNShape_inclusivegateway1">
+        <omgdc:Bounds height="40.0" width="40.0" x="150.0" y="212.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="parallelgateway2" id="BPMNShape_parallelgateway2">
+        <omgdc:Bounds height="40.0" width="40.0" x="412.0" y="457.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="timerintermediatecatchevent1" id="BPMNShape_timerintermediatecatchevent1">
+        <omgdc:Bounds height="35.0" width="35.0" x="60.0" y="380.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="exclusivegateway2" id="BPMNShape_exclusivegateway2">
+        <omgdc:Bounds height="40.0" width="40.0" x="412.0" y="377.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="endevent2" id="BPMNShape_endevent2">
+        <omgdc:Bounds height="35.0" width="35.0" x="1390.0" y="424.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="scripttask2" id="BPMNShape_scripttask2">
+        <omgdc:Bounds height="55.0" width="105.0" x="680.0" y="205.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="mailtask1" id="BPMNShape_mailtask1">
+        <omgdc:Bounds height="55.0" width="105.0" x="920.0" y="205.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="laneFranqueadora" id="BPMNShape_laneFranqueadora">
+        <omgdc:Bounds height="311.0" width="1261.0" x="20.0" y="360.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="mailtaskRemoveEstoqueCentral" id="BPMNShape_mailtaskRemoveEstoqueCentral">
+        <omgdc:Bounds height="55.0" width="105.0" x="520.0" y="370.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="scripttaskReporFilial" id="BPMNShape_scripttaskReporFilial">
+        <omgdc:Bounds height="55.0" width="105.0" x="220.0" y="370.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="endevent3" id="BPMNShape_endevent3">
+        <omgdc:Bounds height="35.0" width="35.0" x="1224.0" y="424.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="usertaskRecebeProduto" id="BPMNShape_usertaskRecebeProduto">
+        <omgdc:Bounds height="55.0" width="105.0" x="1110.0" y="100.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="receivetaskReposicaoFilial" id="BPMNShape_receivetaskReposicaoFilial">
+        <omgdc:Bounds height="55.0" width="105.0" x="520.0" y="450.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="receivetaskRepoCentral" id="BPMNShape_receivetaskRepoCentral">
+        <omgdc:Bounds height="55.0" width="105.0" x="520.0" y="523.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="scripttaskLogistica" id="BPMNShape_scripttaskLogistica">
+        <omgdc:Bounds height="55.0" width="105.0" x="680.0" y="450.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="eventgateway1" id="BPMNShape_eventgateway1">
+        <omgdc:Bounds height="40.0" width="40.0" x="810.0" y="530.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="messagestartevent1" id="BPMNShape_messagestartevent1">
+        <omgdc:Bounds height="35.0" width="35.0" x="870.0" y="590.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="timerintermediatecatchevent2" id="BPMNShape_timerintermediatecatchevent2">
+        <omgdc:Bounds height="35.0" width="35.0" x="870.0" y="533.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="manualtaskPedidoCompra" id="BPMNShape_manualtaskPedidoCompra">
+        <omgdc:Bounds height="55.0" width="105.0" x="970.0" y="523.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="scripttaskCompra" id="BPMNShape_scripttaskCompra">
+        <omgdc:Bounds height="55.0" width="105.0" x="680.0" y="523.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="receivetaskConfirmaCompra" id="BPMNShape_receivetaskConfirmaCompra">
+        <omgdc:Bounds height="55.0" width="105.0" x="970.0" y="580.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="messagestartevent2" id="BPMNShape_messagestartevent2">
+        <omgdc:Bounds height="35.0" width="35.0" x="770.0" y="700.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="parallelgateway3" id="BPMNShape_parallelgateway3">
+        <omgdc:Bounds height="40.0" width="40.0" x="140.0" y="457.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="scripttaskGeraRelatorio" id="BPMNShape_scripttaskGeraRelatorio">
+        <omgdc:Bounds height="55.0" width="105.0" x="390.0" y="610.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="scripttaskMetas" id="BPMNShape_scripttaskMetas">
+        <omgdc:Bounds height="55.0" width="105.0" x="220.0" y="610.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="servicetaskAvaliaEstoques" id="BPMNShape_servicetaskAvaliaEstoques">
+        <omgdc:Bounds height="55.0" width="105.0" x="220.0" y="450.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="errorendevent1" id="BPMNShape_errorendevent1">
+        <omgdc:Bounds height="35.0" width="35.0" x="490.0" y="140.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="servicetaskAtuCentral" id="BPMNShape_servicetaskAtuCentral">
+        <omgdc:Bounds height="55.0" width="105.0" x="1120.0" y="523.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flowFazPedido" id="BPMNEdge_flowFazPedido">
+        <omgdi:waypoint x="95.0" y="67.0"></omgdi:waypoint>
+        <omgdi:waypoint x="210.0" y="67.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="13.0" width="66.0" x="-22.0" y="-17.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flowRecebePedido" id="BPMNEdge_flowRecebePedido">
+        <omgdi:waypoint x="95.0" y="232.0"></omgdi:waypoint>
+        <omgdi:waypoint x="150.0" y="232.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="13.0" width="77.0" x="-31.0" y="-27.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow9" id="BPMNEdge_flow9">
+        <omgdi:waypoint x="1025.0" y="232.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1110.0" y="232.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flowEnviaPedidoCPF" id="BPMNEdge_flowEnviaPedidoCPF">
+        <omgdi:waypoint x="262.0" y="95.0"></omgdi:waypoint>
+        <omgdi:waypoint x="262.0" y="127.0"></omgdi:waypoint>
+        <omgdi:waypoint x="162.0" y="127.0"></omgdi:waypoint>
+        <omgdi:waypoint x="77.0" y="127.0"></omgdi:waypoint>
+        <omgdi:waypoint x="77.0" y="215.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="39.0" width="100.0" x="-22.0" y="-17.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow14" id="BPMNEdge_flow14">
+        <omgdi:waypoint x="190.0" y="232.0"></omgdi:waypoint>
+        <omgdi:waypoint x="220.0" y="232.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow15" id="BPMNEdge_flow15">
+        <omgdi:waypoint x="170.0" y="252.0"></omgdi:waypoint>
+        <omgdi:waypoint x="170.0" y="307.0"></omgdi:waypoint>
+        <omgdi:waypoint x="220.0" y="307.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow16" id="BPMNEdge_flow16">
+        <omgdi:waypoint x="325.0" y="307.0"></omgdi:waypoint>
+        <omgdi:waypoint x="510.0" y="307.0"></omgdi:waypoint>
+        <omgdi:waypoint x="510.0" y="252.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flowTemEstoqueSemDesconto" id="BPMNEdge_flowTemEstoqueSemDesconto">
+        <omgdi:waypoint x="510.0" y="252.0"></omgdi:waypoint>
+        <omgdi:waypoint x="512.0" y="275.0"></omgdi:waypoint>
+        <omgdi:waypoint x="510.0" y="306.0"></omgdi:waypoint>
+        <omgdi:waypoint x="972.0" y="306.0"></omgdi:waypoint>
+        <omgdi:waypoint x="972.0" y="306.0"></omgdi:waypoint>
+        <omgdi:waypoint x="972.0" y="260.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="13.0" width="63.0" x="-207.0" y="-16.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flowFimDoDia" id="BPMNEdge_flowFimDoDia">
+        <omgdi:waypoint x="95.0" y="477.0"></omgdi:waypoint>
+        <omgdi:waypoint x="140.0" y="477.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="13.0" width="37.0" x="-23.0" y="-17.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flowMilhagem" id="BPMNEdge_flowMilhagem">
+        <omgdi:waypoint x="325.0" y="232.0"></omgdi:waypoint>
+        <omgdi:waypoint x="490.0" y="232.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="39.0" width="100.0" x="-47.0" y="-32.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow17" id="BPMNEdge_flow17">
+        <omgdi:waypoint x="325.0" y="477.0"></omgdi:waypoint>
+        <omgdi:waypoint x="412.0" y="477.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow18" id="BPMNEdge_flow18">
+        <omgdi:waypoint x="452.0" y="477.0"></omgdi:waypoint>
+        <omgdi:waypoint x="520.0" y="477.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow24" id="BPMNEdge_flow24">
+        <omgdi:waypoint x="625.0" y="397.0"></omgdi:waypoint>
+        <omgdi:waypoint x="680.0" y="397.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flowUsouMilhas" id="BPMNEdge_flowUsouMilhas">
+        <omgdi:waypoint x="530.0" y="232.0"></omgdi:waypoint>
+        <omgdi:waypoint x="680.0" y="232.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="39.0" width="100.0" x="-75.0" y="-19.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow29" id="BPMNEdge_flow29">
+        <omgdi:waypoint x="432.0" y="417.0"></omgdi:waypoint>
+        <omgdi:waypoint x="432.0" y="441.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1224.0" y="441.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow30" id="BPMNEdge_flow30">
+        <omgdi:waypoint x="325.0" y="397.0"></omgdi:waypoint>
+        <omgdi:waypoint x="412.0" y="397.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flowInicioDia" id="BPMNEdge_flowInicioDia">
+        <omgdi:waypoint x="95.0" y="397.0"></omgdi:waypoint>
+        <omgdi:waypoint x="220.0" y="397.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="13.0" width="43.0" x="-63.0" y="-17.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow31" id="BPMNEdge_flow31">
+        <omgdi:waypoint x="785.0" y="232.0"></omgdi:waypoint>
+        <omgdi:waypoint x="920.0" y="232.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow33" id="BPMNEdge_flow33">
+        <omgdi:waypoint x="1215.0" y="127.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1230.0" y="127.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow35" id="BPMNEdge_flow35">
+        <omgdi:waypoint x="625.0" y="550.0"></omgdi:waypoint>
+        <omgdi:waypoint x="680.0" y="550.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow40" id="BPMNEdge_flow40">
+        <omgdi:waypoint x="785.0" y="397.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1241.0" y="397.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1241.0" y="424.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow41" id="BPMNEdge_flow41">
+        <omgdi:waypoint x="1225.0" y="550.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1241.0" y="548.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1241.0" y="459.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flowProdutoNF" id="BPMNEdge_flowProdutoNF">
+        <omgdi:waypoint x="1162.0" y="205.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1162.0" y="155.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="13.0" width="48.0" x="5.0" y="0.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow42" id="BPMNEdge_flow42">
+        <omgdi:waypoint x="625.0" y="477.0"></omgdi:waypoint>
+        <omgdi:waypoint x="680.0" y="477.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flowTemReposicaoFilial" id="BPMNEdge_flowTemReposicaoFilial">
+        <omgdi:waypoint x="452.0" y="397.0"></omgdi:waypoint>
+        <omgdi:waypoint x="520.0" y="397.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="13.0" width="98.0" x="-74.0" y="-32.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow43" id="BPMNEdge_flow43">
+        <omgdi:waypoint x="785.0" y="477.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1241.0" y="477.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1241.0" y="459.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow44" id="BPMNEdge_flow44">
+        <omgdi:waypoint x="785.0" y="550.0"></omgdi:waypoint>
+        <omgdi:waypoint x="810.0" y="550.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow45" id="BPMNEdge_flow45">
+        <omgdi:waypoint x="830.0" y="570.0"></omgdi:waypoint>
+        <omgdi:waypoint x="830.0" y="607.0"></omgdi:waypoint>
+        <omgdi:waypoint x="830.0" y="607.0"></omgdi:waypoint>
+        <omgdi:waypoint x="870.0" y="607.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow46" id="BPMNEdge_flow46">
+        <omgdi:waypoint x="850.0" y="550.0"></omgdi:waypoint>
+        <omgdi:waypoint x="870.0" y="550.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow47" id="BPMNEdge_flow47">
+        <omgdi:waypoint x="905.0" y="550.0"></omgdi:waypoint>
+        <omgdi:waypoint x="970.0" y="550.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow48" id="BPMNEdge_flow48">
+        <omgdi:waypoint x="905.0" y="607.0"></omgdi:waypoint>
+        <omgdi:waypoint x="970.0" y="607.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow49" id="BPMNEdge_flow49">
+        <omgdi:waypoint x="1075.0" y="607.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1172.0" y="607.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1172.0" y="578.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow50" id="BPMNEdge_flow50">
+        <omgdi:waypoint x="1075.0" y="550.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1120.0" y="550.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow51" id="BPMNEdge_flow51">
+        <omgdi:waypoint x="805.0" y="717.0"></omgdi:waypoint>
+        <omgdi:waypoint x="830.0" y="717.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow53" id="BPMNEdge_flow53">
+        <omgdi:waypoint x="180.0" y="477.0"></omgdi:waypoint>
+        <omgdi:waypoint x="220.0" y="477.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow54" id="BPMNEdge_flow54">
+        <omgdi:waypoint x="160.0" y="497.0"></omgdi:waypoint>
+        <omgdi:waypoint x="160.0" y="637.0"></omgdi:waypoint>
+        <omgdi:waypoint x="220.0" y="637.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow55" id="BPMNEdge_flow55">
+        <omgdi:waypoint x="325.0" y="637.0"></omgdi:waypoint>
+        <omgdi:waypoint x="390.0" y="637.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow58" id="BPMNEdge_flow58">
+        <omgdi:waypoint x="432.0" y="497.0"></omgdi:waypoint>
+        <omgdi:waypoint x="432.0" y="516.0"></omgdi:waypoint>
+        <omgdi:waypoint x="432.0" y="550.0"></omgdi:waypoint>
+        <omgdi:waypoint x="520.0" y="550.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow57" id="BPMNEdge_flow57">
+        <omgdi:waypoint x="882.0" y="690.0"></omgdi:waypoint>
+        <omgdi:waypoint x="888.0" y="679.0"></omgdi:waypoint>
+        <omgdi:waypoint x="887.0" y="625.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flowErroSemEstoque" id="BPMNEdge_flowErroSemEstoque">
+        <omgdi:waypoint x="510.0" y="212.0"></omgdi:waypoint>
+        <omgdi:waypoint x="507.0" y="175.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="13.0" width="100.0" x="21.0" y="-31.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow59" id="BPMNEdge_flow59">
+        <omgdi:waypoint x="495.0" y="637.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1241.0" y="637.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1241.0" y="459.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

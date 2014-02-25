@@ -50,7 +50,7 @@
   </wsdl:binding>
   <wsdl:service name="EstoqueImplService">
     <wsdl:port binding="tns:EstoqueImplServiceSoapBinding" name="EstoqueImplPort">
-      <soap:address location="http://localhost:8181/bestdog/Estoque"/>
+      <soap:address location="http://localhost:8181/bestdog//Estoque"/>
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>

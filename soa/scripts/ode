@@ -1,0 +1,23 @@
+#!/bin/bash
+# BEGIN_CONF
+APP_DIR=bpel
+TMP_ODE_DIR=/tmp/_ode
+ODE_WAR=$APP_DIR/ode/ode-1.3.6.zip
+# END_CONF
+
+ls $APP_DIR/
+if [ $? -ne 0 ]; then
+	echo "APP_DIR not found"
+	exit -1
+fi
+
+# START_SCRIPT
+
+rm -rf $TMP_ODE_DIR
+mkdir $TMP_ODE_DIR
+unzip $ODE_WAR -d $TMP_ODE_DIR
+
+cd $APP_DIR
+
+$MVN_DIR/bin/mvn tomcat7:run-war -Dmaven.tomcat.warDirectory=$TMP_ODE_DIR
+

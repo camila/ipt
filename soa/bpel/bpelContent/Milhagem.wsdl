@@ -50,7 +50,7 @@
   </wsdl:binding>
   <wsdl:service name="MilhagemImplService">
     <wsdl:port binding="tns:MilhagemImplServiceSoapBinding" name="MilhagemImplPort">
-      <soap:address location="http://localhost:8181/bestdog/Milhagem"/>
+      <soap:address location="http://localhost:8181/bestdog//Milhagem"/>
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>

@@ -2,6 +2,8 @@
 
 Projeto final de SOA - IPT
 
+image:/soa/bpel/src/main/resources/diagrams/SOAProcess.png[]
+
 [width="70%",format="csv"]
 |====================================
 ID,Funcionalidade,
@@ -43,19 +45,29 @@ ID,Operações,,Entrada,Saída,
 
 ==== Requisitos
 
-.Download:
+.Ferramentas:
 * apache tomcat 7x
 * ode.war
-* h2-1.3.170.jar (jdbc:h2:bpm/src/test/resources/activiti)
+* h2-1.3.170.jar (jdbc:h2:~/test)
+* (para compilar e executar) Eclipse JEE (WTP, GIT e Maven) com os plugins de BPEL (http://download.eclipse.org/bpel/site/) e BPM (Activiti Diagram Editor)
+* (somente para executar) Cliente SOAP (WS Explorer, SOAP UI, http://www.360works.com/soap-client/, etc.)
+
+.Código
+* Fazer o checkout do branch "soa" de https://github.com/kmila/ipt
+* No Eclipse, importar os 2 projetos Maven do diretório "soa" (File > Import > Maven > Existing Maven)
+* Aguardar o download das dependências do Maven (pode levar alguns minutos, acompanhe na view de "Progress" do Eclipse)
+* Alterar o projeto "bpel" (botão direito no projeto .bpel > Properties > Project Facets) para compatibilidade com o plugin de BPEL do Eclipse conforme imagem abaixo:
+
+image:/soa/doc/eclipsebpel.png[]
+image:/soa/doc/facet.png[]
+
+.Preparação:
+* Iniciar o H2 (java -jar h2.jar)
+* Iniciar o tomcat com ode.war instalado (bin/catalina.sh start)
+* Iniciar os webservices (mvn package tomcat7:run-war)
 
 .Procedimento:
-* Instalar o Eclipse JEE com o plugin do BPEL (http://download.eclipse.org/bpel/site/). Opcionalmente, instale o plugin do BPM (Activiti Diagram Editor)
-* Iniciar o H2 (java -jar h2.jar)
-* Iniciar o tomcat (bin/catalina.sh start)
-* Iniciar os webservices (mvn package tomcat7:run-war)
-* Copiar o ode.war para o tomcat
-* Copiar o dir. bpelContent para ode/WEB-INF/processes
+1. Copiar o dir. bpelContent para ode/WEB-INF/processes
+2. A partir de um cliente ws., invocar o processo informando o CPF e o código do item
 
-A partir de um cliente ws (WS Explorer ou SOAP UI) invocar o "calculamilhagem.process" informando o CPF:
-
-http://localhost:8080/ode/processes/calculamilhagem?wsdl
+http://localhost:8080/ode/processes/bestdog?wsdl
