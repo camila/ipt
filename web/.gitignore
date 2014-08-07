@@ -1,0 +1,45 @@
+target/
+bin/
+gen/
+
+# Java class files
+*.class
+
+# built native files
+*.o
+*.so
+
+# IDE
+.classpath
+.project
+.settings/
+.metadata/
+.livereload
+.idea
+*.iml
+.textmate
+*.sublime-*
+nbactions.xml
+
+# Maven
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+release.properties
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+# Gradle
+.gradle
+build/
+proguard/
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+
+.DS_Store

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+  layout:decorator="layout">
+  <head>
+    <meta charset="UTF-8" />
+    <title>e-commerce</title>
+  </head>
+  <body>
+    <h1 layout:fragment="header">Loja - Lista</h1>
+    <div layout:fragment="content" class="container">
+      <div class="pull-right">
+              <a href="admin.html"
+                  th:href="@{'/admin'}">
+                <img src="img/admin.png" alt="admin" />
+              </a>        
+       </div>
+      <table class="table table-bordered table-striped">
+        <thead>
+          <tr>
+            <td>ID</td>
+            <td>Descrição</td>
+            <td>Valor</td>
+            <td>Imagem</td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:if="${products.empty}">
+            <td colspan="3">
+              No items
+            </td>
+          </tr>
+          <tr th:each="produto : ${products}">
+            <td th:text="${produto.id}">1</td>
+            <td>
+              <a href="view.html"
+                  th:href="@{'/' + ${produto.id}}"
+                  th:text="${produto.summary}">
+                Descrição
+              </a>
+            </td>
+            <td th:text="${produto.value}">
+              10,00
+            </td>
+            <td>
+              <img width="90" height="90" src="img/ico.jpg" th:src="${produto.image.path}" alt="img" />
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>

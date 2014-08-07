@@ -1,0 +1,56 @@
+<?xml version='1.0' encoding='UTF-8'?><wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://dog.best/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http" name="MilhagemImplService" targetNamespace="http://dog.best/">
+  <wsdl:types>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://dog.best/" elementFormDefault="unqualified" targetNamespace="http://dog.best/" version="1.0">
+
+  <xs:element name="calculaMilhagem" type="tns:calculaMilhagem"/>
+
+  <xs:element name="calculaMilhagemResponse" type="tns:calculaMilhagemResponse"/>
+
+  <xs:complexType name="calculaMilhagem">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="calculaMilhagemResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="calculaMilhagemResponse">
+    <wsdl:part element="tns:calculaMilhagemResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="calculaMilhagem">
+    <wsdl:part element="tns:calculaMilhagem" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="Milhagem">
+    <wsdl:operation name="calculaMilhagem">
+      <wsdl:input message="tns:calculaMilhagem" name="calculaMilhagem">
+    </wsdl:input>
+      <wsdl:output message="tns:calculaMilhagemResponse" name="calculaMilhagemResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="MilhagemImplServiceSoapBinding" type="tns:Milhagem">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="calculaMilhagem">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="calculaMilhagem">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="calculaMilhagemResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="MilhagemImplService">
+    <wsdl:port binding="tns:MilhagemImplServiceSoapBinding" name="MilhagemImplPort">
+      <soap:address location="http://localhost:8181/bestdog//Milhagem"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

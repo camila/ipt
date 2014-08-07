@@ -1,0 +1,95 @@
+<?xml version='1.0' encoding='UTF-8'?><wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://dog.best/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http" name="EstoqueImplService" targetNamespace="http://dog.best/">
+  <wsdl:types>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://dog.best/" elementFormDefault="unqualified" targetNamespace="http://dog.best/" version="1.0">
+
+  <xs:element name="calculaEstoque" type="tns:calculaEstoque"/>
+
+  <xs:element name="calculaEstoqueResponse" type="tns:calculaEstoqueResponse"/>
+
+  <xs:element name="consultaEstoque" type="tns:consultaEstoque"/>
+
+  <xs:element name="consultaEstoqueResponse" type="tns:consultaEstoqueResponse"/>
+
+  <xs:complexType name="calculaEstoque">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="calculaEstoqueResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="consultaEstoque">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="consultaEstoqueResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="consultaEstoque">
+    <wsdl:part element="tns:consultaEstoque" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="calculaEstoqueResponse">
+    <wsdl:part element="tns:calculaEstoqueResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="calculaEstoque">
+    <wsdl:part element="tns:calculaEstoque" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="consultaEstoqueResponse">
+    <wsdl:part element="tns:consultaEstoqueResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="Estoque">
+    <wsdl:operation name="calculaEstoque">
+      <wsdl:input message="tns:calculaEstoque" name="calculaEstoque">
+    </wsdl:input>
+      <wsdl:output message="tns:calculaEstoqueResponse" name="calculaEstoqueResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="consultaEstoque">
+      <wsdl:input message="tns:consultaEstoque" name="consultaEstoque">
+    </wsdl:input>
+      <wsdl:output message="tns:consultaEstoqueResponse" name="consultaEstoqueResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="EstoqueImplServiceSoapBinding" type="tns:Estoque">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="calculaEstoque">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="calculaEstoque">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="calculaEstoqueResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="consultaEstoque">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="consultaEstoque">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="consultaEstoqueResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="EstoqueImplService">
+    <wsdl:port binding="tns:EstoqueImplServiceSoapBinding" name="EstoqueImplPort">
+      <soap:address location="http://localhost:8181/bestdog/Estoque"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

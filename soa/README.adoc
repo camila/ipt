@@ -1,0 +1,91 @@
+=== Projeto final de SOA - IPT
+
+++++
+<div>
+<p>Webservices/BPEL e banco de dados</p>
+<ul>
+<li><a href="http://127.0.1.1:8082/">DATABASE</a></li>
+<li><a href="http://127.0.1.1:8080/ode">BPEL (engine)</a></li>
+<li><a href="http://127.0.1.1:8181/bestdog">WEBSERVICES</a></li>
+</ul>
+</div>
+++++
+
+image:/soa/bpel/src/main/resources/diagrams/SOAProcess.png[]
+
+[width="70%",format="csv"]
+|====================================
+ID,Funcionalidade,
+1,Consulta de milhagem,
+2,Consulta estoque da filial,
+3,"Calculo de desconto por ""milhas""",
+4,Baixa do estoque,
+5,Baixa do pedido (meta),
+6,Consulta estoque de todas filiais,
+7,Consulta estoque da central,
+8,Atualiza estoque da central,
+9,Atualiza estoque das filiais,
+10,Calcula metas das filiais,
+11,Gera relatorios,
+12,Avalia compra fornecedor,
+13,Planejamento Logistico,
+14,Efetua compra fornecedor,
+15,Transfere produtos filial,
+|====================================
+
+[width="70%",format="csv"]
+|====================================
+ID,Operações,,Entrada,Saída,
+,franquia_recebe_pedido,,"cpf_cliente,cod_opcao","produto,desconto",
+,franquia_calcula_milhagem,,cpf_cliente,"true,false",
+,franquia_calcula_estoque,,cod_opcao,"true,false",
+,franquia_calcula_desconto,,"cpf_cliente,cod_opcao",valor,
+,franquia_baixa_estoque,,cod_opcao,,(atualiza total de itens)
+,franquia_baixa_pedido,,cod_opcao,,(atualiza faturamento)
+,franquia_devolve_desconto,,"cpf_cliente,opcao,valor",valor,
+,central_solicita_reposicao_filial,,"cod_item,qtde",total_item_filial,
+,central_solicita_reposicao_central,,,,
+,central_seleciona_fornecedor,,,,
+,central_gera_relatorio,,,"[cod_franquia,vendas_mes,estoque_bebida,estoque_dog]*",
+,central_calcula_metas,,,,
+,central_planejamento_logistico,,,,
+|====================================
+
+
+==== Requisitos
+
+.Java
+* JDK 1.7
+* Maven 3x
+
+.Ferramentas:
+* apache tomcat 7x
+* ode.war
+* h2-1.3.170.jar (jdbc:h2:~/test)
+* (para compilar e executar) Eclipse JEE (WTP, GIT e Maven) com os plugins de BPEL (http://download.eclipse.org/bpel/site/) e BPM (Activiti Diagram Editor, opcional)
+* (para executar) Cliente SOAP (WS Explorer ou SOAP UI)
+* (scripts) curl e wget
+
+.Código-fonte
+* Fazer o checkout do branch "soa" de https://github.com/kmila/ipt
+* No Eclipse, importar os 2 projetos Maven do diretório "soa" (File > Import > Maven > Existing Maven)
+
+image:/soa/doc/eclipsemaven.png[]
+
+* Aguardar o download das dependências do Maven (pode levar alguns minutos, acompanhe na view de "Progress" do Eclipse)
+* Alterar o projeto "bpel" (botão direito no projeto .bpel > Properties > Project Facets) para compatibilidade com o plugin de BPEL do Eclipse conforme imagem abaixo:
+
+image:/soa/doc/eclipsefacet.png[]
+
+.Preparação:
+* Iniciar o H2 (java -jar h2.jar)
+* Iniciar o tomcat com ode.war instalado (bin/catalina.sh start)
+* Iniciar os webservices (mvn package tomcat7:run-war)
+* Fazer o deploy do BPEL: copiar o dir. bpelContent para "ode/WEB-INF/processes"
+
+image:/soa/doc/eclipsebpel.png[]
+
+.Procedimento
+* ./run.sh
+* Acessar o WS do processo de compra informando o CPF e o código do item: http://localhost:8080/ode/processes/bestdog?wsdl
+* Acessar a URL do banco de dados e verificar o número de milhas e disponibilidade em estoque.

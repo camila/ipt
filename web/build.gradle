@@ -1,0 +1,108 @@
+apply plugin: 'java'
+apply plugin: 'eclipse-wtp'
+apply plugin: 'idea'
+apply plugin: 'war'
+apply plugin: 'spring-boot'
+apply plugin: 'application'
+
+mainClassName = "demo.Application"
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
+version = "1.0.0"
+
+buildscript {
+    repositories {
+        mavenCentral()
+        maven { url "http://repo.spring.io/release" }
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.1.4.RELEASE")
+    }
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    maven { url "http://repo.spring.io/release" }
+}
+
+jar {
+    manifest.attributes['Implementation-Title'] = project.name
+    manifest.attributes['Implementation-Version'] = project.version
+}
+
+javadoc {
+    options.encoding = "UTF-8"
+}
+
+war {
+    baseName = project.name
+    version = project.version
+    manifest.attributes['Implementation-Title'] = project.name
+    manifest.attributes['Implementation-Version'] = project.version
+}
+
+configurations {
+    providedRuntime
+    all*.exclude module: 'jackson-databind'
+    all*.exclude module: 'snakeyaml'
+    all*.exclude module: 'ognl'
+    all*.exclude module: 'log4j-over-slf4j-1.7.7.jar'
+}
+
+dependencies {
+    compile("org.springframework.boot:spring-boot-starter-web")
+    compile("org.springframework.boot:spring-boot-starter-thymeleaf")
+    providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
+    testCompile("org.springframework.boot:spring-boot-starter-test")
+}
+
+task dist(dependsOn: 'build') << {
+    copy {
+        from war.archivePath
+        into file("target")
+    }
+}
+
+clean {
+    delete += file('target')
+}
+
+task developerBuild << {
+    println "Building " + project.name + "-" + project.version
+}
+
+gradle.taskGraph.whenReady {taskGraph ->
+    if (taskGraph.hasTask(developerBuild)) {
+        System.setProperty("developerBuild", "true");
+    }
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
+
+task stage(dependsOn: 'dist') << {
+    delete {
+        file("build")
+    }
+}
+
+test {
+    onlyIf { Boolean.getBoolean("developerBuild") }
+}
+
+run {
+    if (Boolean.getBoolean("developerBuild")) {
+        jvmArgs '-Xdebug', '-Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=8000'
+    }
+}
+
+task wrapper(type: Wrapper) {
+    // BUILDPACK_URL=https://github.com/botcoder/heroku-buildpack-gradle
+    gradleVersion = '1.9'
+}
+
+defaultTasks "clean", "developerBuild", "build", "installApp", "dist"
