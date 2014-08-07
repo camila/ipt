@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:soapui-project activeEnvironment="Default" name="bestdog.bpel" resourceRoot="" soapui-version="4.6.4" abortOnError="false" runType="SEQUENTIAL" xmlns:con="http://eviware.com/soapui/config"><con:settings/><con:interface xsi:type="con:WsdlInterface" wsaVersion="NONE" name="BestDogEstoqueBinding" type="wsdl" bindingName="{best.dog}BestDogEstoqueBinding" soapVersion="1_1" anonymous="optional" definition="http://127.0.1.1:8080/ode/processes/BestDogEstoque?wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="http://127.0.1.1:8080/ode/processes/BestDogEstoque?wsdl"><con:part><con:url>http://127.0.1.1:8080/ode/processes/BestDogEstoque?wsdl</con:url><con:content><![CDATA[<wsdl:definitions targetNamespace="best.dog" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:plnk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:tns="best.dog" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/">
+  <wsdl:types>
+    <schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="best.dog" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://dog.best/">
+      <element name="BestDogEstoqueRequest">
+        <complexType>
+          <sequence>
+            <element name="input" type="string"/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="BestDogEstoqueResponse">
+        <complexType>
+          <sequence>
+            <element name="result" type="string"/>
+          </sequence>
+        </complexType>
+      </element>
+    </schema>
+    <xsd:schema attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://dog.best/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns1="http://schemas.xmlsoap.org/soap/http" xmlns:tns="http://dog.best/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xsd:element name="calculaEstoque" type="tns:calculaEstoque"/>
+      <xsd:element name="calculaEstoqueResponse" type="tns:calculaEstoqueResponse"/>
+      <xsd:complexType name="calculaEstoque">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="arg0" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="calculaEstoqueResponse">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="return" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="BestDogEstoqueRequestMessage">
+    <wsdl:part name="payload" element="tns:BestDogEstoqueRequest"/>
+  </wsdl:message>
+  <wsdl:message name="BestDogEstoqueResponseMessage">
+    <wsdl:part name="payload" element="tns:BestDogEstoqueResponse"/>
+  </wsdl:message>
+  <wsdl:portType name="BestDogEstoquePortType">
+    <wsdl:operation name="process">
+      <wsdl:input message="tns:BestDogEstoqueRequestMessage" wsaw:Action="best.dog/process"/>
+      <wsdl:output message="tns:BestDogEstoqueResponseMessage" wsaw:Action="best.dog/BestDogEstoque/processResponse"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="BestDogEstoqueBinding" type="tns:BestDogEstoquePortType">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+    <wsdl:operation name="process">
+      <soap:operation soapAction="best.dog/process" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="BestDogEstoque">
+    <wsdl:port name="BestDogEstoquePort" binding="tns:BestDogEstoqueBinding">
+      <soap:address location="http://127.0.1.1:8080/ode/processes/BestDogEstoque.BestDogEstoquePort/"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://127.0.1.1:8080/ode/processes/BestDogEstoque.BestDogEstoquePort/</con:endpoint></con:endpoints><con:operation isOneWay="false" action="best.dog/process" name="process" bindingOperationName="process" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="BPEL_ESTOQUE"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/ode/processes/BestDogEstoque.BestDogEstoquePort/</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:best="best.dog">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <best:BestDogEstoqueRequest>
+         <best:input>1</best:input>
+      </best:BestDogEstoqueRequest>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="best.dog/process"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:interface xsi:type="con:WsdlInterface" wsaVersion="NONE" name="BestDogMainProcessBinding" type="wsdl" bindingName="{br.ipt.soa}BestDogMainProcessBinding" soapVersion="1_1" anonymous="optional" definition="http://localhost:8080/ode/processes/BestDogMainProcess?wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="http://localhost:8080/ode/processes/BestDogMainProcess?wsdl"><con:part><con:url>http://localhost:8080/ode/processes/BestDogMainProcess?wsdl</con:url><con:content><![CDATA[<wsdl:definitions targetNamespace="br.ipt.soa" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:plnk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:tns="br.ipt.soa" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/">
+  <wsdl:types>
+    <schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="br.ipt.soa" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://dog.best/">
+      <element name="BestDogMainProcessRequest">
+        <complexType>
+          <sequence>
+            <element name="input" type="string"/>
+            <element name="item" type="string"/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="BestDogMainProcessResponse">
+        <complexType>
+          <sequence>
+            <element name="result" type="string"/>
+          </sequence>
+        </complexType>
+      </element>
+    </schema>
+    <xsd:schema attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://dog.best/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns1="http://schemas.xmlsoap.org/soap/http" xmlns:tns="http://dog.best/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xsd:element name="calculaMilhagem" type="tns:calculaMilhagem"/>
+      <xsd:element name="calculaMilhagemResponse" type="tns:calculaMilhagemResponse"/>
+      <xsd:complexType name="calculaMilhagem">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="arg0" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="calculaMilhagemResponse">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="return" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:schema>
+    <xsd:schema attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://dog.best/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns1="http://schemas.xmlsoap.org/soap/http" xmlns:tns="http://dog.best/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xsd:element name="calculaEstoque" type="tns:calculaEstoque"/>
+      <xsd:element name="calculaEstoqueResponse" type="tns:calculaEstoqueResponse"/>
+      <xsd:complexType name="calculaEstoque">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="arg0" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="calculaEstoqueResponse">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="return" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="BestDogMainProcessRequestMessage">
+    <wsdl:part name="payload" element="tns:BestDogMainProcessRequest"/>
+  </wsdl:message>
+  <wsdl:message name="BestDogMainProcessResponseMessage">
+    <wsdl:part name="payload" element="tns:BestDogMainProcessResponse"/>
+  </wsdl:message>
+  <wsdl:portType name="BestDogMainProcessPortType">
+    <wsdl:operation name="process">
+      <wsdl:input message="tns:BestDogMainProcessRequestMessage" wsaw:Action="br.ipt.soa/process"/>
+      <wsdl:output message="tns:BestDogMainProcessResponseMessage" wsaw:Action="br.ipt.soa/BestDogMainProcess/processResponse"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="BestDogMainProcessBinding" type="tns:BestDogMainProcessPortType">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+    <wsdl:operation name="process">
+      <soap:operation soapAction="br.ipt.soa/process" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="BestDogMainProcess">
+    <wsdl:port name="BestDogMainProcessPort" binding="tns:BestDogMainProcessBinding">
+      <soap:address location="http://localhost:8080/ode/processes/BestDogMainProcess.BestDogMainProcessPort/"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://localhost:8080/ode/processes/BestDogMainProcess.BestDogMainProcessPort/</con:endpoint></con:endpoints><con:operation isOneWay="false" action="br.ipt.soa/process" name="process" bindingOperationName="process" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="BESTDOG"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/ode/processes/BestDogMainProcess.BestDogMainProcessPort/</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:br="br.ipt.soa">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <br:BestDogMainProcessRequest>
+         <br:input>123456789</br:input>
+         <br:item>1</br:item>
+      </br:BestDogMainProcessRequest>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="br.ipt.soa/process"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:properties/><con:wssContainer/><con:sensitiveInformation/></con:soapui-project>

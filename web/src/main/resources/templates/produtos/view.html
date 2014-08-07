@@ -1,0 +1,47 @@
+<html xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+  layout:decorator="layout">
+  <head>
+    <meta charset="UTF-8" />
+    <title>e-commerce</title>
+  </head>
+  <body>
+    <h1 layout:fragment="header">Produtos - Visualizar</h1>
+    <div layout:fragment="content"
+        class="container">
+      <div class="alert alert-success"
+          th:if="${globalMessage}"
+          th:text="${globalMessage}">
+        Mensagens globais
+      </div>
+      <div class="pull-right">
+            <a href="cart.html"
+                  th:href="@{'/addToCart/' + ${product.id}}">
+                <img th:src="@{/img/cart.png}" src="../../static/img/cart.png" height="30" alt="Carrinho" />
+              </a>
+        <br />      
+        <a th:href="@{/}" href="list.html">
+          Voltar
+        </a>
+      </div>
+      <dl>
+        <dt>ID</dt>
+        <dd id="id" th:text="${product.id}">0</dd>
+        <dt>Descrição</dt>
+        <dd id="summary"
+            th:text="${product.summary}">
+          A short summary...
+        </dd>        
+        <dt>Valor</dt>
+        <dd id="created"
+            th:text="${product.value}">
+          R$ 10,00
+        </dd>
+        <dt>Imagem</dt>
+        <dd id="text">
+          <img src="img/img.jpg" th:src="${product.image.path}" alt="img" />
+        </dd>
+      </dl>
+    </div>
+  </body>
+</html>

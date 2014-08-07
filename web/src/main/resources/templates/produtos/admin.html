@@ -1,0 +1,32 @@
+<html xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+  layout:decorator="layout">
+  <head>
+    <meta charset="UTF-8" />
+    <title>e-commerce</title>
+  </head>
+  <body>
+    <h1 layout:fragment="header">Produtos - Administrar</h1>
+    <div layout:fragment="content"
+        class="container">
+      <div class="alert alert-success"
+          th:if="${globalMessage}"
+          th:text="${globalMessage}">
+        Mensagens globais
+      </div>
+      <div class="pull-right">
+        <a th:href="@{/}" href="list.html">
+          Voltar
+        </a>
+      </div>
+      <dl>
+        <dt></dt>
+        <dd><a th:href="@{/form?new}" href="">Criar produto</a></dd>
+        <dt></dt>
+        <dd><a th:href="@{/admin/sync}" href="">Recarregar produtos</a></dd>
+        <dt></dt>
+        <dd><a th:href="@{/admin/clear}" href="">Remover produtos</a></dd>
+      </dl>
+    </div>
+  </body>
+</html>

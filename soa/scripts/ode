@@ -19,5 +19,5 @@ unzip $ODE_WAR -d $TMP_ODE_DIR
 
 cd $APP_DIR
 
-$MVN_DIR/bin/mvn tomcat7:run-war -Dmaven.tomcat.warDirectory=$TMP_ODE_DIR
+mvn tomcat7:run-war -DskipTests -Dmaven.test.skip=true -Dmaven.tomcat.warDirectory=$TMP_ODE_DIR
 

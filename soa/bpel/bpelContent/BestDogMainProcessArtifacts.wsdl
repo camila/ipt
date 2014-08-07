@@ -10,14 +10,19 @@
     <plnk:partnerLinkType name="MilhagemPL">
     <plnk:role name="MilhagemRole" portType="wsdl:Milhagem"/>
   </plnk:partnerLinkType>
+    <plnk:partnerLinkType name="EstoqueMainPartnerLinkType">
+    <plnk:role name="EstoqueMainPartnerLinkRole" portType="wsdl:Estoque"/>
+  </plnk:partnerLinkType>
     <import location="Milhagem.wsdl" namespace="http://dog.best/"/>
+    <import location="Estoque.wsdl" namespace="http://dog.best/"/>
     <types>
         <schema xmlns="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="br.ipt.soa">
 
             <element name="BestDogMainProcessRequest">
                 <complexType>
                     <sequence>
-                        <element name="input" type="string"/>
+                    	<element name="input" type="string"/>
+                    	<element name="item" type="string"/>
                     </sequence>
                 </complexType>
             </element>

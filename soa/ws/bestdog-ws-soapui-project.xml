@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:soapui-project activeEnvironment="Default" name="bestdog.ws" resourceRoot="" soapui-version="4.6.4" xmlns:con="http://eviware.com/soapui/config"><con:settings/><con:interface xsi:type="con:WsdlInterface" wsaVersion="NONE" name="EstoqueImplServiceSoapBinding" type="wsdl" bindingName="{http://dog.best/}EstoqueImplServiceSoapBinding" soapVersion="1_1" anonymous="optional" definition="http://localhost:8181/bestdog/Estoque?wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="http://localhost:8181/bestdog/Estoque?wsdl"><con:part><con:url>http://localhost:8181/bestdog/Estoque?wsdl</con:url><con:content><![CDATA[<wsdl:definitions name="EstoqueImplService" targetNamespace="http://dog.best/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://dog.best/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http">
+  <wsdl:types>
+    <xs:schema elementFormDefault="unqualified" targetNamespace="http://dog.best/" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:element name="calculaEstoque" type="tns:calculaEstoque"/>
+      <xs:element name="calculaEstoqueResponse" type="tns:calculaEstoqueResponse"/>
+      <xs:element name="consultaEstoque" type="tns:consultaEstoque"/>
+      <xs:element name="consultaEstoqueResponse" type="tns:consultaEstoqueResponse"/>
+      <xs:complexType name="calculaEstoque">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="arg0" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="calculaEstoqueResponse">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="return" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="consultaEstoque">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="arg0" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="consultaEstoqueResponse">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="return" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="consultaEstoque">
+    <wsdl:part element="tns:consultaEstoque" name="parameters"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="calculaEstoqueResponse">
+    <wsdl:part element="tns:calculaEstoqueResponse" name="parameters"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="calculaEstoque">
+    <wsdl:part element="tns:calculaEstoque" name="parameters"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="consultaEstoqueResponse">
+    <wsdl:part element="tns:consultaEstoqueResponse" name="parameters"></wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="Estoque">
+    <wsdl:operation name="calculaEstoque">
+      <wsdl:input message="tns:calculaEstoque" name="calculaEstoque"></wsdl:input>
+      <wsdl:output message="tns:calculaEstoqueResponse" name="calculaEstoqueResponse"></wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="consultaEstoque">
+      <wsdl:input message="tns:consultaEstoque" name="consultaEstoque"></wsdl:input>
+      <wsdl:output message="tns:consultaEstoqueResponse" name="consultaEstoqueResponse"></wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="EstoqueImplServiceSoapBinding" type="tns:Estoque">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="calculaEstoque">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="calculaEstoque">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="calculaEstoqueResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="consultaEstoque">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="consultaEstoque">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="consultaEstoqueResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="EstoqueImplService">
+    <wsdl:port binding="tns:EstoqueImplServiceSoapBinding" name="EstoqueImplPort">
+      <soap:address location="http://localhost:8181/bestdog/Estoque"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://localhost:8181/bestdog/Estoque</con:endpoint></con:endpoints><con:operation isOneWay="false" action="" name="calculaEstoque" bindingOperationName="calculaEstoque" type="Request-Response" outputName="calculaEstoqueResponse" inputName="calculaEstoque" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8181/bestdog/Estoque</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:dog="http://dog.best/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <dog:calculaEstoque>
+         <!--Optional:-->
+         <arg0>?</arg0>
+      </dog:calculaEstoque>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://dog.best/Estoque/calculaEstoque"/></con:call></con:operation><con:operation isOneWay="false" action="" name="consultaEstoque" bindingOperationName="consultaEstoque" type="Request-Response" outputName="consultaEstoqueResponse" inputName="consultaEstoque" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8181/bestdog/Estoque</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:dog="http://dog.best/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <dog:consultaEstoque>
+         <!--Optional:-->
+         <arg0>1</arg0>
+      </dog:consultaEstoque>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://dog.best/Estoque/consultaEstoque"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:interface xsi:type="con:WsdlInterface" wsaVersion="NONE" name="MilhagemImplServiceSoapBinding" type="wsdl" bindingName="{http://dog.best/}MilhagemImplServiceSoapBinding" soapVersion="1_1" anonymous="optional" definition="http://localhost:8181/bestdog/Milhagem?wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="http://localhost:8181/bestdog/Milhagem?wsdl"><con:part><con:url>http://localhost:8181/bestdog/Milhagem?wsdl</con:url><con:content><![CDATA[<wsdl:definitions name="MilhagemImplService" targetNamespace="http://dog.best/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://dog.best/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http">
+  <wsdl:types>
+    <xs:schema elementFormDefault="unqualified" targetNamespace="http://dog.best/" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:element name="calculaMilhagem" type="tns:calculaMilhagem"/>
+      <xs:element name="calculaMilhagemResponse" type="tns:calculaMilhagemResponse"/>
+      <xs:complexType name="calculaMilhagem">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="arg0" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="calculaMilhagemResponse">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="return" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="calculaMilhagemResponse">
+    <wsdl:part element="tns:calculaMilhagemResponse" name="parameters"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="calculaMilhagem">
+    <wsdl:part element="tns:calculaMilhagem" name="parameters"></wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="Milhagem">
+    <wsdl:operation name="calculaMilhagem">
+      <wsdl:input message="tns:calculaMilhagem" name="calculaMilhagem"></wsdl:input>
+      <wsdl:output message="tns:calculaMilhagemResponse" name="calculaMilhagemResponse"></wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="MilhagemImplServiceSoapBinding" type="tns:Milhagem">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="calculaMilhagem">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="calculaMilhagem">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="calculaMilhagemResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="MilhagemImplService">
+    <wsdl:port binding="tns:MilhagemImplServiceSoapBinding" name="MilhagemImplPort">
+      <soap:address location="http://localhost:8181/bestdog/Milhagem"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://localhost:8181/bestdog/Milhagem</con:endpoint></con:endpoints><con:operation isOneWay="false" action="" name="calculaMilhagem" bindingOperationName="calculaMilhagem" type="Request-Response" outputName="calculaMilhagemResponse" inputName="calculaMilhagem" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8181/bestdog/Milhagem</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:dog="http://dog.best/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <dog:calculaMilhagem>
+         <!--Optional:-->
+         <arg0>?</arg0>
+      </dog:calculaMilhagem>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://dog.best/Milhagem/calculaMilhagem"/></con:call></con:operation></con:interface><con:properties/><con:wssContainer/></con:soapui-project>

@@ -6,5 +6,7 @@ import javax.jws.WebService;
 public interface Estoque {
 	
 	String calculaEstoque(String codItem);
+	
+	String consultaEstoque(String codItem);
 
 }

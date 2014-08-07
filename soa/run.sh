@@ -2,6 +2,7 @@
 
 BASEDIR=$PWD
 SCRIPTS_PATH=$BASEDIR/scripts
+CURL_APP='http://localhost:8080/ode/processes/BestDogMainProcess?wsdl'
 
 . env.sh
 
@@ -13,8 +14,8 @@ open_tab() {
   TERMINAL_CMD_PARSED=`echo $TERMINAL_CMD | sed "s/V_TITLE/$1/"`
 
   echo "[$TERMINAL_CMD \"$CMD_PARSED\"]"
-  #read -p "(press ENTER to confirm)"
-  $TERMINAL_CMD_PARSED "$CMD_PARSED"
+  
+  $TERMINAL_CMD_PARSED "$CMD_PARSED" &
 }
 
 if [ $? -ne 0 ]; then
@@ -23,27 +24,52 @@ if [ $? -ne 0 ]; then
 	exit -1
 fi
 
-cd $BASEDIR/bpel
-$MVN_DIR/bin/mvn package
-cd $BASEDIR
+curl -IL $CURL_APP &> /tmp/_curl
+grep "HTTP/1.1 200" /tmp/_curl
 
-cd $BASEDIR/ws/bestdog
-$MVN_DIR/bin/mvn package
-cd $BASEDIR
+if [ $? -eq 0 ]; then
+ echo "already started"
+else
+ psjava=`ps aux | grep java | grep _ode | grep -v grep | wc -l`
+ if [ $psjava -eq 1 ]; then
+ 	echo "already running"
+ else
+	cd $BASEDIR/bpel
+	mvn package -DskipTests -Dmaven.test.skip=true
+	cd $BASEDIR
 
-echo ""
+	cd $BASEDIR/ws/bestdog
+	mvn package -DskipTests -Dmaven.test.skip=true
+	cd $BASEDIR
 
-echo "STARTING H2..."
-open_tab h2 $SCRIPTS_PATH
+	echo ""
 
-echo "STARTING WS..."
-open_tab ws $SCRIPTS_PATH
+	echo "STARTING H2..."
+	open_tab h2 $SCRIPTS_PATH
 
-echo "STARTING ODE..."
-open_tab ode $SCRIPTS_PATH
+	echo "STARTING WS..."
+	open_tab ws $SCRIPTS_PATH
 
+	echo "STARTING ODE..."
+	open_tab ode $SCRIPTS_PATH
 
-#firefox -new-tab http://localhost:8181/bestdog/ &
-#firefox -new-tab http://localhost:8080/bpel/ &
+	echo "aguarde 1 minuto..."
+	sleep 60
 
-#/bpel/bpel.sh
+	curl -IL $CURL_APP &> /tmp/_curl
+
+	if [ $? -ne 0 ]; then
+		    echo "..."
+	        echo "aguarde 30s..."
+        	sleep 30
+	fi
+
+	echo "deploying..."
+	cd bpel
+	./bpel.sh
+	cd ..
+
+ fi
+fi
+
+exo-open start.html

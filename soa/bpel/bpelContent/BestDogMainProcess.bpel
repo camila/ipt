@@ -5,7 +5,7 @@
          suppressJoinFailure="yes"
          xmlns:tns="br.ipt.soa"
          xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable"
-         xmlns:ns="http://dog.best/">
+         xmlns:ns="http://dog.best/" xmlns:ns1="http://www.w3.org/2001/XMLSchema">
 
     <!-- Import the client WSDL -->
 	<bpel:import location="BestDogMainProcessArtifacts.wsdl" namespace="br.ipt.soa" 
@@ -22,6 +22,7 @@
                      myRole="BestDogMainProcessProvider"
                      />
         <bpel:partnerLink name="MilhagemPartnerLink" partnerLinkType="tns:MilhagemPL" partnerRole="MilhagemRole"></bpel:partnerLink>
+        <bpel:partnerLink name="EstoqueMainPartnerLink" partnerLinkType="tns:EstoqueMainPartnerLinkType" partnerRole="EstoqueMainPartnerLinkRole"></bpel:partnerLink>
     </bpel:partnerLinks>
   
     <!-- ================================================================= -->         
@@ -38,8 +39,20 @@
           -->
         <bpel:variable name="output"
                   messageType="tns:BestDogMainProcessResponseMessage"/>
+        
+        
+        
+        
+        <bpel:variable name="flow1" type="ns1:string"></bpel:variable>
+        <bpel:variable name="flow2" type="ns1:string"></bpel:variable>
+        
+        
+        
+        
         <bpel:variable name="MilhagemPartnerLinkResponse" messageType="ns:calculaMilhagemResponse"></bpel:variable>
         <bpel:variable name="MilhagemPartnerLinkRequest" messageType="ns:calculaMilhagem"></bpel:variable>
+        <bpel:variable name="EstoqueMainPartnerLinkResponse" messageType="ns:calculaEstoqueResponse"></bpel:variable>
+        <bpel:variable name="EstoqueMainPartnerLinkRequest" messageType="ns:calculaEstoque"></bpel:variable>
     </bpel:variables>
 
     <!-- ================================================================= -->         
@@ -58,25 +71,85 @@
                  createInstance="yes"/>
         
         <!-- Generate reply to synchronous request -->
-        <bpel:assign validate="no" name="AssignIn">
-            <bpel:copy>
-                <bpel:from><bpel:literal><tns:calculaMilhagem xmlns:tns="http://dog.best/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <bpel:flow name="Flow"><bpel:sequence name="Sequence">
+                <bpel:assign validate="no" name="AssignEstoque">
+                    
+                    
+                    
+                    
+                    
+                    <bpel:copy>
+                        <bpel:from><bpel:literal><tns:calculaEstoque xmlns:tns="http://dog.best/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <arg0>arg0</arg0>
+</tns:calculaEstoque>
+</bpel:literal></bpel:from>
+                        <bpel:to variable="EstoqueMainPartnerLinkRequest" part="parameters"></bpel:to>
+                    </bpel:copy>
+                    <bpel:copy>
+                        <bpel:from part="payload" variable="input">
+                            <bpel:query queryLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0"><![CDATA[tns:item]]></bpel:query>
+                        </bpel:from>
+                        <bpel:to part="parameters" variable="EstoqueMainPartnerLinkRequest">
+                            <bpel:query queryLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0"><![CDATA[arg0]]></bpel:query>
+                        </bpel:to>
+                    </bpel:copy>
+                </bpel:assign>
+                <bpel:invoke name="InvokeEstoque" partnerLink="EstoqueMainPartnerLink" operation="calculaEstoque" portType="ns:Estoque" inputVariable="EstoqueMainPartnerLinkRequest" outputVariable="EstoqueMainPartnerLinkResponse"></bpel:invoke>
+                <bpel:assign validate="no" name="AssignEstoqueOut">
+                    
+                    
+                    <bpel:copy>
+                        <bpel:from part="parameters" variable="EstoqueMainPartnerLinkResponse">
+                            <bpel:query queryLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0"><![CDATA[return]]></bpel:query>
+                        </bpel:from>
+                        <bpel:to variable="flow2"></bpel:to>
+                    </bpel:copy>
+                </bpel:assign>
+            </bpel:sequence><bpel:sequence name="Sequence1">
+                <bpel:assign validate="no" name="AssignIn">
+            
+            
+                    
+                    
+                    <bpel:copy>
+                        <bpel:from><bpel:literal><tns:calculaMilhagem xmlns:tns="http://dog.best/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <arg0>arg0</arg0>
 </tns:calculaMilhagem>
 </bpel:literal></bpel:from>
-                <bpel:to variable="MilhagemPartnerLinkRequest" part="parameters"></bpel:to>
-            </bpel:copy>
-            <bpel:copy>
-                <bpel:from part="payload" variable="input">
-                    <bpel:query queryLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0"><![CDATA[tns:input]]></bpel:query>
-                </bpel:from>
-                <bpel:to part="parameters" variable="MilhagemPartnerLinkRequest">
-                    <bpel:query queryLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0"><![CDATA[arg0]]></bpel:query>
-                </bpel:to>
-            </bpel:copy>
-        </bpel:assign>
-        <bpel:invoke name="InvokeMilhagem" partnerLink="MilhagemPartnerLink" operation="calculaMilhagem" portType="ns:Milhagem" inputVariable="MilhagemPartnerLinkRequest" outputVariable="MilhagemPartnerLinkResponse"></bpel:invoke>
-        <bpel:assign validate="no" name="AssignOut">
+                        <bpel:to variable="MilhagemPartnerLinkRequest" part="parameters"></bpel:to>
+                    </bpel:copy>
+                    <bpel:copy>
+                        <bpel:from part="payload" variable="input">
+                            <bpel:query queryLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0"><![CDATA[tns:input]]></bpel:query>
+                        </bpel:from>
+                        <bpel:to part="parameters" variable="MilhagemPartnerLinkRequest">
+                            <bpel:query queryLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0"><![CDATA[arg0]]></bpel:query>
+                        </bpel:to>
+                    </bpel:copy>
+                </bpel:assign>
+                <bpel:invoke name="InvokeMilhagem" partnerLink="MilhagemPartnerLink" operation="calculaMilhagem" portType="ns:Milhagem" inputVariable="MilhagemPartnerLinkRequest" outputVariable="MilhagemPartnerLinkResponse"></bpel:invoke>
+                <bpel:assign validate="no" name="AssignOut">
+            
+        
+                    
+                    
+                    <bpel:copy>
+                        <bpel:from part="parameters" variable="MilhagemPartnerLinkResponse">
+                            <bpel:query queryLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0"><![CDATA[return]]></bpel:query>
+                        </bpel:from>
+                        <bpel:to variable="flow1"></bpel:to>
+                    </bpel:copy>
+                </bpel:assign>
+            </bpel:sequence></bpel:flow>
+        
+        
+        
+        <bpel:assign validate="no" name="Assign">
+            
+            
+            
+            
+            
             <bpel:copy>
                 <bpel:from><bpel:literal><tns:BestDogMainProcessResponse xmlns:tns="br.ipt.soa" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <tns:result>tns:result</tns:result>
@@ -85,8 +158,8 @@
                 <bpel:to variable="output" part="payload"></bpel:to>
             </bpel:copy>
             <bpel:copy>
-                <bpel:from part="parameters" variable="MilhagemPartnerLinkResponse">
-                    <bpel:query queryLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0"><![CDATA[return]]></bpel:query>
+                <bpel:from expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">
+                    <![CDATA[concat($input.payload/tns:input,$flow1,$flow2)]]>
                 </bpel:from>
                 <bpel:to part="payload" variable="output">
                     <bpel:query queryLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0"><![CDATA[tns:result]]></bpel:query>

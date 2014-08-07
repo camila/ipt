@@ -8,5 +8,5 @@ fi
 
 cd $APP_DIR
 # START_SCRIPT
-$MVN_DIR/bin/mvn clean package tomcat7:run-war
+mvn clean package tomcat7:run-war
 

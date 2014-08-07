@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<deploy xmlns="http://www.apache.org/ode/schemas/dd/2007/03" xmlns:br.ipt.soa="br.ipt.soa" xmlns:dog.best="http://dog.best/">
+<deploy xmlns="http://www.apache.org/ode/schemas/dd/2007/03" xmlns:best.dog="best.dog" xmlns:br.ipt.soa="br.ipt.soa" xmlns:dog.best="http://dog.best/">
+  <process name="best.dog:BestDogEstoque">
+    <active>true</active>
+    <retired>false</retired>
+    <process-events generate="all"/>
+    <provide partnerLink="client">
+      <service name="best.dog:BestDogEstoqueService" port="BestDogEstoquePort"/>
+    </provide>
+    <invoke partnerLink="EstoquePartnerLink">
+      <service name="dog.best:EstoqueImplService" port="EstoqueImplPort"/>
+    </invoke>
+  </process>
   <process name="br.ipt.soa:BestDogMainProcess">
     <active>true</active>
     <retired>false</retired>
@@ -9,6 +20,9 @@
     </provide>
     <invoke partnerLink="MilhagemPartnerLink">
       <service name="dog.best:MilhagemImplService" port="MilhagemImplPort"/>
+    </invoke>
+    <invoke partnerLink="EstoqueMainPartnerLink">
+      <service name="dog.best:EstoqueImplService" port="EstoqueImplPort"/>
     </invoke>
   </process>
 </deploy>

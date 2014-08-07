@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+  layout:decorator="layout">
+  <head>
+    <meta charset="UTF-8" />
+    <title>e-commerce</title>
+  </head>
+  <body>
+    <h1 layout:fragment="header">Carrinho - Lista</h1>
+    <div layout:fragment="content" class="container">
+      <div class="pull-right">
+              <a href="#"
+                 th:onclick="'javascript:window.open(\'' + @{/submitCart} + '\'); window.location.href=(\'' + @{/listCart} + '\'); return true;'">
+                Finalizar compra
+              </a>
+       </div>
+      <table class="table table-bordered table-striped">
+        <thead>
+          <tr>
+            <td>ID</td>
+            <td>Descrição</td>
+            <td>Valor</td>
+            <td>Ação</td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:if="${cart.empty}">
+            <td colspan="3">
+              No items
+            </td>
+          </tr>
+          <tr th:each="produto : ${cart}">
+            <td th:text="${produto.id}">1</td>
+            <td>
+              <a href="view.html"
+                  th:href="@{'/' + ${produto.id}}"
+                  th:text="${produto.summary}">
+                Descrição
+              </a>
+            </td>
+            <td th:text="${produto.value}">
+              10,00
+            </td>
+            <td>
+              <a href="cart.html"
+                  th:href="@{'/removeFromCart/' + ${produto.id}}"
+                  th:text="#{messages.action.del}">
+                Ação
+              </a>
+            </td>            
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>

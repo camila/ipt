@@ -11,6 +11,8 @@ import javax.jws.WebService;
 public class MilhagemImpl implements Milhagem {
 
 	private static final String DEFAULT_DB = "jdbc:h2:tcp://localhost/~/test;USER=sa";
+	
+	private static final int MAX = 10;
 
 	static {
 		try {
@@ -21,14 +23,21 @@ public class MilhagemImpl implements Milhagem {
 	}
 
 	public String calculaMilhagem(String cpf) {
-		int total = salvaMilhas(cpf);
-		String result = cpf + " tem " + total + " milhas";
-		System.out.println(result);
-		return result;
+		int totalAcumulado = salvaMilhas(cpf);
+		System.out.println(cpf + " tem " + (totalAcumulado == 0 ? MAX : totalAcumulado) + " milhas");
+		switch (totalAcumulado) {
+		case 0:
+			// nessa implementação, total = 0 indica que o cliente chegou no limite e ganhará um lanche grátis
+			return ";desconto: 100%;";
+		case 5:
+			return ";desconto: 50%;";
+		default:
+			return ";desconto: 0%;";
+		}
 	}
 
 	private int salvaMilhas(String cpf) {
-		int total = 0;
+		int total = 1;
 		try (Connection conn = DriverManager.getConnection(DEFAULT_DB)) {
 			PreparedStatement statSelect = conn
 					.prepareStatement("select total from IPT_MILHAGEM where cpf = ?");
@@ -36,6 +45,10 @@ public class MilhagemImpl implements Milhagem {
 			ResultSet rs = statSelect.executeQuery();
 			while (rs.next()) {
 				total += rs.getInt("total");
+			}
+			// reseta as milhas se chegar ao limite
+			if (total >= MAX) {
+				total = 0;
 			}
 			PreparedStatement statInsert = conn
 					.prepareStatement("merge into IPT_MILHAGEM key(cpf) values(?, ?)");
@@ -48,8 +61,9 @@ public class MilhagemImpl implements Milhagem {
 			rs.close();
 		} catch (Exception e) {
 			// nao calcula as milhas
+			e.printStackTrace();
 		}
 		return total;
 	}
-
+	
 }
