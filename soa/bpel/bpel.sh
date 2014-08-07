@@ -1,5 +1,6 @@
 #!/bin/bash
-TMP_ODE_DIR=/tmp/_ode
+TMP_ODE_DIR=target/ode
+
 WSDL_URL=http://localhost:8181/bestdog/
 
 if [ "$1" == "wsdl" ]; then
@@ -10,6 +11,7 @@ if [ "$1" == "wsdl" ]; then
 
 
 else
+
   rm -rf $TMP_ODE_DIR/WEB-INF/processes/bpelContent
   sleep 1
   cp -r bpelContent/ $TMP_ODE_DIR/WEB-INF/processes/
