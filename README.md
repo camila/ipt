@@ -3,5 +3,5 @@ ipt
 
 Projetos do curso do IPT
 
-* SOA: bpel sample process powered by apache-ode
-* WEB: heroku-ready e-commerce powered by spring-mvc 4
+* SOA: bpel sample process (http://ode.apache.org)
+* WEB: heroku-ready e-commerce (http://projects.spring.io/spring-boot)
