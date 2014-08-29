@@ -29,7 +29,7 @@ Devido à restrição de uso de banco de dados do Heroku somente a clientes pago
 
 #### Documentação técnica: 
 
-* Projeto baseado em https://github.com/spring-projects/spring-test-htmlunit
+* Projeto baseado em: github.com/spring-projects/spring-boot spring-boot-sample-web-ui
 * Ver javadoc (`gradle javadoc`)
 
 #### Casos de Uso
